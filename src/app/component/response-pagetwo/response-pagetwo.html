@@ -1,0 +1,18 @@
+<h1>Pages</h1>
+
+@if (loading()) {
+  <p>Loading...</p>
+}
+
+@if (!loading() && pages().length === 0) {
+  <p>No published data available</p>
+}
+
+@if (pages().length > 0) {
+  @for (item of pages(); track item.id) {
+    <p><b>ID:</b> {{ item.id }}</p>
+    <p><b>IDENTIFIER:</b>{{ item.identifier }}</p>
+    <P><b>URL:</b>{{item.thumbnailUrl}}</P>
+    <hr />
+  }
+}

@@ -1,0 +1,125 @@
+<!-- <h1>Page event container</h1>
+
+@if (loading()) {
+  <div>Loading page events...</div>
+}
+
+@if (!loading() && error()) {
+  <div style="color: red">
+    {{ error() }}
+  </div>
+}
+
+@if (!loading() && !error() && pageEvents().length > 0) {
+  @for (event of pageEvents(); track event.id) {
+    <div style="border: 1px solid #ddd; padding: 12px; margin-bottom: 16px">
+      <h3>
+        {{ event.pageName }} — {{ event.eventProducerName }}
+      </h3>
+
+      <p>
+        <strong>Created By:</strong> {{ event.createdBy }} <br />
+        <strong>Date:</strong> {{ event.createDate }}
+      </p>
+
+      @for (container of event.eventActionContainers; track container.id) {
+        <div style="margin-left: 16px">
+          <h4>Event Type: {{ container.eventType }}</h4>
+
+          @if (container.actions?.length) {
+            <strong>Actions:</strong>
+            <ul>
+              @for (action of container.actions; track action.id) {
+                <li>
+                  {{ action.actionType }}
+                  @if (action.popupControlName) {
+                    → {{ action.popupControlName }}
+                  }
+                </li>
+              }
+            </ul>
+          }
+
+          @if (container.paramBindings?.length) {
+            <strong>Param Bindings:</strong>
+            <ul>
+              @for (param of container.paramBindings; track param.id) {
+                <li>
+                  {{ param.fieldName }} → {{ param.param }}
+                  ({{ param.datasourceName }})
+                </li>
+              }
+            </ul>
+          }
+
+          <hr />
+        </div>
+      }
+    </div>
+  }
+}
+
+@if (!loading() && !error() && pageEvents().length === 0) {
+  <div>No page events found.</div>
+} -->
+
+
+
+
+
+
+
+
+<div>
+
+  <h2>Invalid Page Events</h2>
+
+
+  @if (loading) {
+    <div>Loading events...</div>
+  }
+
+  @if (!loading && invalidEvents.length === 0) {
+    <div>No Invalid Page Events Found</div>
+  }
+
+
+  @if (!loading && invalidEvents.length > 0) {
+
+    @for (event of invalidEvents; track event.id) {
+
+      <div style="
+        border: 1px solid #ccc;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        /* background-color: #f9f9f9; */
+      ">
+
+        <h3 style="margin:0 0 10px 0;">
+          {{ event.pageName }} — {{ event.eventProducerName }}
+        </h3>
+
+        <p>
+          <strong>App Code:</strong> {{ event.appCode }}
+        </p>
+
+        <p>
+          <strong>Created By:</strong> {{ event.createdBy }}
+        </p>
+
+        <p>
+          <strong>Create Date:</strong> {{ event.createDate }}
+        </p>
+
+        <p style="color:red; font-weight:bold;">
+          Status: Invalid Configuration
+        </p>
+
+      </div>
+
+    }
+
+  }
+
+</div>

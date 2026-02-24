@@ -1,0 +1,52 @@
+.nav-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+}
+
+.nav-btn {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+
+
+
+.api2 {
+  background-color: bisque;
+  color: black;
+}
+
+.api3 {
+  background-color: brown;
+  color: white;
+}
+
+.api4 {
+  background-color: cadetblue;
+  color: white;
+}
+
+.expenses {
+  background-color: darkgreen;
+  color: white;
+}
+
+.expenses-control {
+  background-color: darkorange;
+  color: white;
+}
+
+.ds-data {
+  background-color: slateblue;
+  color: white;
+}
