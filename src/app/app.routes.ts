@@ -9,6 +9,8 @@ import { ExpensesLogicFromPages } from './component/expenses-logic-from-pages/ex
 import { ExpensesLogicFromControl } from './component/expenses-logic-from-control/expenses-logic-from-control';
 import { ExpensesParent } from './component/expenses-parent/expenses-parent';
 import { DraftEvaluteComponent } from './component/draft-evalute-component/draft-evalute-component';
+import { DataModellerComponent } from './component/data-modeller-component/data-modeller-component';
+import { FluentComponent } from './component/fluent-component/fluent-component';
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -20,7 +22,9 @@ export const routes: Routes = [
    { path: 'expensesControl', component: ExpensesLogicFromControl },
 
     { path: 'dsData', component: ExpensesParent },
-    {path:'draft-evaluate', component:DraftEvaluteComponent}
+    {path:'draft-evaluate', component:DraftEvaluteComponent},
+    {path:'data-modeller',component:DataModellerComponent},
+    {path:'fluent-service',component:FluentComponent}
 ];
 
 @NgModule({

@@ -1,0 +1,177 @@
+<!-- <div *ngIf="loading" style="font-weight:bold; margin:10px 0;">Loading...</div>
+<div *ngIf="errorMessage" style="color:red; margin:10px 0;">{{ errorMessage }}</div>
+
+<div *ngFor="let item of evaluatedData" class="card" style="margin-bottom:20px; padding:10px; border:1px solid #ccc; border-radius:5px;">
+  <h3>{{ item.appArtifactName }} ({{ item.state }})</h3>
+
+  <table border="1" width="100%" *ngIf="item.differences.length > 0">
+    <tr>
+      <th>Field</th>
+      <th>Draft</th>
+      <th>Actual</th>
+    </tr>
+
+    <tr *ngFor="let diff of item.differences">
+      <td>{{ diff.field }}</td>
+
+      <td style="color: green; vertical-align: top;">
+        <ng-container *ngIf="isObject(diff.draftValue); else draftPrimitive">
+          <div *ngFor="let kv of toKeyValueArray(diff.draftValue)" style="margin-left:5px;">
+            <strong>{{ kv.key }}:</strong>
+            <ng-container *ngIf="isObject(kv.value) || kv.value?.length">
+              <div *ngFor="let sub of kv.value" style="margin-left:15px;">
+                <strong>{{ sub.key }}:</strong> {{ sub.value }}
+              </div>
+            </ng-container>
+            <ng-container *ngIf="!kv.value?.length">{{ kv.value }}</ng-container>
+          </div>
+        </ng-container>
+        <ng-template #draftPrimitive>{{ diff.draftValue }}</ng-template>
+      </td>
+
+      <td style="color: red; vertical-align: top;">
+        <ng-container *ngIf="isObject(diff.actualValue); else actualPrimitive">
+          <div *ngFor="let kv of toKeyValueArray(diff.actualValue)" style="margin-left:5px;">
+            <strong>{{ kv.key }}:</strong>
+            <ng-container *ngIf="isObject(kv.value) || kv.value?.length">
+              <div *ngFor="let sub of kv.value" style="margin-left:15px;">
+                <strong>{{ sub.key }}:</strong> {{ sub.value }}
+              </div>
+            </ng-container>
+            <ng-container *ngIf="!kv.value?.length">{{ kv.value }}</ng-container>
+          </div>
+        </ng-container>
+        <ng-template #actualPrimitive>{{ diff.actualValue }}</ng-template>
+      </td>
+    </tr>
+  </table>
+
+  <p *ngIf="item.differences.length === 0" style="color: gray; font-style: italic;">
+    No Differences
+  </p>
+</div>
+ -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Loading -->
+<div *ngIf="loading()" style="font-weight:bold; margin:10px 0;">
+  Loading...
+</div>
+
+
+<div *ngIf="errorMessage()" style="color:red; margin:10px 0;">
+  {{ errorMessage() }}
+</div>
+
+<!-- Grouped Data -->
+<div *ngIf="!loading() && !errorMessage()">
+
+  <!-- Loop Groups -->
+  <div *ngFor="let group of groupedData()" style="margin-bottom:30px;">
+
+    <!-- Group Header -->
+    <h2 style="
+      background:#f4f4f4;
+      padding:10px;
+      border-left:5px solid #1976d2;">
+      {{ group.name }}
+    </h2>
+
+    <!-- Loop Items Inside Group -->
+    <div *ngFor="let item of group.items"
+         class="card"
+         style="margin-bottom:20px; padding:10px; border:1px solid #ccc; border-radius:5px;">
+
+      <h3>State: {{ item.state }}</h3>
+
+      <!-- Differences Table -->
+      <table border="1" width="100%" *ngIf="item.differences && item.differences.length > 0">
+        <tr>
+          <th>Field</th>
+          <th style="color:green;">Draft</th>
+          <th style="color:red;">Actual</th>
+        </tr>
+
+        <tr *ngFor="let diff of item.differences">
+          <td>{{ diff.field }}</td>
+
+          <!-- Draft Column -->
+          <td style="color: green; vertical-align: top;">
+            <ng-container *ngIf="isObject(diff.draftValue); else draftPrimitive">
+
+              <div *ngFor="let kv of toKeyValueArray(diff.draftValue)" style="margin-left:5px;">
+                <strong>{{ kv.key }}:</strong>
+
+                <ng-container *ngIf="isObject(kv.value) || isArray(kv.value); else draftValuePrimitive">
+                  <div *ngFor="let sub of kv.value" style="margin-left:15px;">
+                    <strong>{{ sub.key }}:</strong> {{ sub.value }}
+                  </div>
+                </ng-container>
+
+                <ng-template #draftValuePrimitive>
+                  {{ kv.value }}
+                </ng-template>
+
+              </div>
+
+            </ng-container>
+
+            <ng-template #draftPrimitive>
+              {{ diff.draftValue ?? 'null'}}
+            </ng-template>
+          </td>
+
+          <!-- Actual Column -->
+          <td style="color: red; vertical-align: top;">
+            <ng-container *ngIf="isObject(diff.actualValue); else actualPrimitive">
+
+              <div *ngFor="let kv of toKeyValueArray(diff.actualValue)" style="margin-left:5px;">
+                <strong>{{ kv.key }}:</strong>
+
+                <ng-container *ngIf="isObject(kv.value) ||isArray(kv.value); else actualValuePrimitive">
+                  <div *ngFor="let sub of kv.value" style="margin-left:15px;">
+                    <strong>{{ sub.key }}:</strong> {{ sub.value }}
+                  </div>
+                </ng-container>
+
+                <ng-template #actualValuePrimitive>
+                  {{ kv.value }}
+                </ng-template>
+
+              </div>
+
+            </ng-container>
+
+            <ng-template #actualPrimitive>
+              {{ diff.actualValue ?? 'null'}}
+            </ng-template>
+          </td>
+
+        </tr>
+      </table>
+
+      <!-- No Differences -->
+      <p *ngIf="!item.differences?.length"
+         style="color: gray; font-style: italic;">
+        No Differences
+      </p>
+
+    </div>
+
+  </div>
+
+</div>

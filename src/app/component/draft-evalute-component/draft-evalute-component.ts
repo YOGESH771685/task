@@ -68,7 +68,7 @@ export class DraftEvaluteComponent implements OnInit {
     this.service.getEvaluatedData().subscribe({
       next: (res) => {
         console.log('API Success:', res);
-        this.evaluatedData = res;
+        this.evaluatedData = res
         this.loading = false;
       },
       error: (err) => {
@@ -77,6 +77,10 @@ export class DraftEvaluteComponent implements OnInit {
         this.loading = false;
       },
     });
+  }
+
+  prettyPrint(obj: any): string {
+    return JSON.stringify(obj, null, 2); // '2' is indentation
   }
 
   isObject(value: any): boolean {
@@ -108,3 +112,51 @@ export class DraftEvaluteComponent implements OnInit {
     return String(value);
   }
 }
+
+
+
+
+
+
+
+
+
+
+// import { Component, OnInit } from '@angular/core';
+// import { DraftEvaluateService } from '../../service/draft-evaluate-service';
+// import { CommonModule } from '@angular/common';
+
+// @Component({
+//   selector: 'app-draft-evalute-component',
+//   standalone: true,
+//   imports: [CommonModule],
+//   templateUrl: './draft-evalute-component.html',
+//   styleUrls: ['./draft-evalute-component.css'],
+// })
+// export class DraftEvaluteComponent implements OnInit {
+//   evaluatedData: any[] = [];
+//   loading = true;
+//   errorMessage = '';
+
+//   constructor(private service: DraftEvaluateService) {}
+
+//   ngOnInit(): void {
+//     this.service.getEvaluatedData().subscribe({
+//       next: (res) => {
+//         this.evaluatedData = res;
+//         this.loading = false;
+//       },
+//       error: () => {
+//         this.errorMessage = 'API Failed';
+//         this.loading = false;
+//       },
+//     });
+//   }
+
+//   isObject(value: any): boolean {
+//     return value !== null && typeof value === 'object';
+//   }
+// }
+
+
+
