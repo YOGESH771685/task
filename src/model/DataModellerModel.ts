@@ -1,18 +1,47 @@
-export interface DataModellerResponse {
-  draft: string;
+// export interface DataModellerResponse {
+//   draft: string;
+//   actual: string | null;
+//   appArtifactName: string;
+//   state: string;
+// }
+
+// export interface Difference {
+//   field: string;
+//   draftValue: any;
+//   actualValue: any;
+// }
+
+// export interface EvaluatedItem {
+//   appArtifactName: string;
+//   state: string;
+//   differences: Difference[];
+// }
+
+
+
+export interface EvaluateRequest {
+  appArtifactType: string;
+  aggregateAppEntityName: string;
+}
+
+export interface EvaluateApiResponse {
+  draft: string | null;
   actual: string | null;
+  state: 'INSERT' | 'UPDATE' | 'DELETE';
   appArtifactName: string;
-  state: string;
 }
 
-export interface Difference {
-  field: string;
-  draftValue: any;
-  actualValue: any;
+export interface ParsedArtifact {
+  [key: string]: any;
 }
 
-export interface EvaluatedItem {
-  appArtifactName: string;
+export interface DiffItem {
   state: string;
-  differences: Difference[];
+  differences: Record<string, { draft: any; actual: any }>;
 }
+
+export interface GroupedDiff {
+  appArtifactName: string;
+  items: DiffItem[];
+}
+

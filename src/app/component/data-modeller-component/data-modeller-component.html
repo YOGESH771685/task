@@ -67,111 +67,92 @@
 
 
 
-<!-- Loading -->
-<div *ngIf="loading()" style="font-weight:bold; margin:10px 0;">
-  Loading...
-</div>
 
+@if (loading()) {
+<div class="loading">Loading...</div>
+}
 
-<div *ngIf="errorMessage()" style="color:red; margin:10px 0;">
-  {{ errorMessage() }}
-</div>
+@if (error()) {
+<div class="error">{{ error() }}</div>
+}
 
-<!-- Grouped Data -->
-<div *ngIf="!loading() && !errorMessage()">
+<!-- Loop by appArtifactName -->
+@for (artifact of objectKeys(groupedData()); track artifact) {
 
-  <!-- Loop Groups -->
-  <div *ngFor="let group of groupedData()" style="margin-bottom:30px;">
+<div class="artifact-block">
 
-    <!-- Group Header -->
-    <h2 style="
-      background:#f4f4f4;
-      padding:10px;
-      border-left:5px solid #1976d2;">
-      {{ group.name }}
-    </h2>
+  <h2 class="artifact-title">
+    {{ artifact }}
+  </h2>
 
-    <!-- Loop Items Inside Group -->
-    <div *ngFor="let item of group.items"
-         class="card"
-         style="margin-bottom:20px; padding:10px; border:1px solid #ccc; border-radius:5px;">
+  <!-- Loop each record -->
+  @for (item of groupedData()[artifact]; track $index) {
 
-      <h3>State: {{ item.state }}</h3>
+  <div class="record-card">
 
-      <!-- Differences Table -->
-      <table border="1" width="100%" *ngIf="item.differences && item.differences.length > 0">
+    <div class="record-header">
+      <span class="state-label">State:</span>
+      <span class="state-value">{{ item.state }}</span>
+    </div>
+
+    <table class="diff-table">
+
+      <thead>
         <tr>
           <th>Field</th>
-          <th style="color:green;">Draft</th>
-          <th style="color:red;">Actual</th>
+          <th>Draft</th>
+          <th>Actual</th>
         </tr>
+      </thead>
 
-        <tr *ngFor="let diff of item.differences">
-          <td>{{ diff.field }}</td>
+      <tbody>
 
-          <!-- Draft Column -->
-          <td style="color: green; vertical-align: top;">
-            <ng-container *ngIf="isObject(diff.draftValue); else draftPrimitive">
+        <!-- No Difference -->
+        @if (item.differences.length === 0) {
+        <tr>
+          <td colspan="3" class="no-diff-cell">
+            <div><strong>Draft ID:</strong> {{ item.draftId }}</div>
+            <div class="no-diff-text">No Difference</div>
+          </td>
+        </tr>
+        }
 
-              <div *ngFor="let kv of toKeyValueArray(diff.draftValue)" style="margin-left:5px;">
-                <strong>{{ kv.key }}:</strong>
+        <!-- Differences -->
+        @for (row of item.differences; track $index) {
 
-                <ng-container *ngIf="isObject(kv.value) || isArray(kv.value); else draftValuePrimitive">
-                  <div *ngFor="let sub of kv.value" style="margin-left:15px;">
-                    <strong>{{ sub.key }}:</strong> {{ sub.value }}
-                  </div>
-                </ng-container>
-
-                <ng-template #draftValuePrimitive>
-                  {{ kv.value }}
-                </ng-template>
-
-              </div>
-
-            </ng-container>
-
-            <ng-template #draftPrimitive>
-              {{ diff.draftValue ?? 'null'}}
-            </ng-template>
+        <tr>
+          <td class="field-cell">
+            {{ row.field }}
           </td>
 
-          <!-- Actual Column -->
-          <td style="color: red; vertical-align: top;">
-            <ng-container *ngIf="isObject(diff.actualValue); else actualPrimitive">
-
-              <div *ngFor="let kv of toKeyValueArray(diff.actualValue)" style="margin-left:5px;">
-                <strong>{{ kv.key }}:</strong>
-
-                <ng-container *ngIf="isObject(kv.value) ||isArray(kv.value); else actualValuePrimitive">
-                  <div *ngFor="let sub of kv.value" style="margin-left:15px;">
-                    <strong>{{ sub.key }}:</strong> {{ sub.value }}
-                  </div>
-                </ng-container>
-
-                <ng-template #actualValuePrimitive>
-                  {{ kv.value }}
-                </ng-template>
-
-              </div>
-
-            </ng-container>
-
-            <ng-template #actualPrimitive>
-              {{ diff.actualValue ?? 'null'}}
-            </ng-template>
+          <td class="draft-cell">
+            <pre>
+{{ row.draft !== null && row.draft !== undefined
+    ? (typeof row.draft === 'object' ? (row.draft | json) : row.draft)
+    : 'null' }}
+                  </pre>
           </td>
 
+          <td class="actual-cell">
+            <pre>
+{{ row.actual !== null && row.actual !== undefined
+    ? (typeof row.actual === 'object' ? (row.actual | json) : row.actual)
+    : 'null' }}
+                  </pre>
+          </td>
         </tr>
-      </table>
 
-      <!-- No Differences -->
-      <p *ngIf="!item.differences?.length"
-         style="color: gray; font-style: italic;">
-        No Differences
-      </p>
+        }
 
-    </div>
+      </tbody>
+
+    </table>
 
   </div>
 
+  }
+
 </div>
+
+}
+

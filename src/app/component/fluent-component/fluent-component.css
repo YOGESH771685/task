@@ -1,0 +1,115 @@
+/* Button */
+.load-btn {
+  padding: 8px 16px;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+.load-btn:hover {
+  background-color: #125aa3;
+}
+
+/* Loading & Error */
+.loading {
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.error {
+  color: red;
+  margin-bottom: 10px;
+}
+
+/* Artifact Block */
+.artifact-block {
+  margin-top: 40px;
+}
+
+/* Artifact Title */
+.artifact-title {
+  border-left: 5px solid #1976d2;
+  padding-left: 10px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+/* Record Card */
+.record-card {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 25px;
+  border-radius: 6px;
+  background-color: #fafafa;
+}
+
+/* Record Header */
+.record-header {
+  margin-bottom: 12px;
+}
+
+.state-label {
+  font-weight: 600;
+  margin-right: 5px;
+}
+
+.state-value {
+  color: #333;
+}
+
+/* Table */
+.diff-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.diff-table th {
+  background-color: #f2f2f2;
+  text-align: left;
+  padding: 8px;
+  border: 1px solid #ddd;
+}
+
+.diff-table td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  vertical-align: top;
+}
+
+/* Field Column */
+.field-cell {
+  font-weight: 500;
+}
+
+/* Draft Column */
+.draft-cell {
+  color: #2e7d32;
+}
+
+/* Actual Column */
+.actual-cell {
+  color: #c62828;
+}
+
+/* No Difference */
+.no-diff-cell {
+  text-align: center;
+  padding: 20px;
+}
+
+.no-diff-text {
+  margin-top: 10px;
+  font-style: italic;
+  color: #777;
+}
+
+/* Pre formatting */
+pre {
+  margin: 0;
+  font-family: monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}

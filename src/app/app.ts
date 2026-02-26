@@ -11,7 +11,7 @@ import { FluentComponent } from './component/fluent-component/fluent-component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [ Home, RouterOutlet,DraftEvaluteComponent,DataModellerComponent,FluentComponent],
+  imports: [ Home, RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

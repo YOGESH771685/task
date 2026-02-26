@@ -38,6 +38,14 @@ export class Home {
 
       case 'draft-evaluate':
         this.router.navigate(['draft-evaluate'])
+        break;
+
+      case 'data-modeller':
+        this.router.navigate(['data-modeller'])
+        break;
+
+      case 'fluent-service':
+        this.router.navigate(['fluent-service'])
 
     }
   }
