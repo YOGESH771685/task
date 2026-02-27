@@ -113,3 +113,55 @@ pre {
   white-space: pre-wrap;
   word-break: break-word;
 }
+
+
+/* ============================= */
+/* MAPPING SECTION (Same Theme) */
+/* ============================= */
+
+.mapping-section {
+  margin-top: 40px;
+}
+
+/* Section Titles */
+.mapping-title {
+  border-left: 5px solid #1976d2;
+  padding-left: 10px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+/* Mapped Title */
+.mapped-title {
+  color: #2e7d32;
+}
+
+/* Unmapped Title */
+.unmapped-title {
+  color: #c62828;
+}
+
+/* Mapping Table */
+.mapping-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mapping-table th {
+  background-color: #f2f2f2;
+  text-align: left;
+  padding: 8px;
+  border: 1px solid #ddd;
+}
+
+.mapping-table td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  vertical-align: top;
+}
+
+/* Highlight Not Matched */
+.not-matched {
+  color: #c62828;
+  font-weight: 600;
+}

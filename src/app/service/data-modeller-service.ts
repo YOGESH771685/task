@@ -87,7 +87,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
-import { EvaluateApiResponse, EvaluateRequest } from '../../model/DraftEvaluateResponse';
+import { EvaluateApiResponse, EvaluateRequest } from '../../model/PageModellerModel';
 
 
 @Injectable({ providedIn: 'root' })

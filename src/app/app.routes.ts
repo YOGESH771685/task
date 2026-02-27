@@ -8,7 +8,7 @@ import { TestPageComponent } from './component/response/TestPageComponent';
 import { ExpensesLogicFromPages } from './component/expenses-logic-from-pages/expenses-logic-from-pages';
 import { ExpensesLogicFromControl } from './component/expenses-logic-from-control/expenses-logic-from-control';
 import { ExpensesParent } from './component/expenses-parent/expenses-parent';
-import { DraftEvaluteComponent } from './component/draft-evalute-component/draft-evalute-component';
+import { DraftEvaluteComponent } from './component/PageModeller-draft-evalute-component/PageModeller-draft-evalute-component';
 import { DataModellerComponent } from './component/data-modeller-component/data-modeller-component';
 import { FluentComponent } from './component/fluent-component/fluent-component';
 

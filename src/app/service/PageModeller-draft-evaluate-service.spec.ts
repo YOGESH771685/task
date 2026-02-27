@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { DraftEvaluateService } from './draft-evaluate-service';
+import { DraftEvaluate } from './PageModeller-draft-evaluate-service';
 
 describe('DraftEvaluateServiceTs', () => {
-  let service: DraftEvaluateService;
+  let service: DraftEvaluate;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(DraftEvaluateService);
+    service = TestBed.inject(DraftEvaluate);
   });
 
   it('should be created', () => {

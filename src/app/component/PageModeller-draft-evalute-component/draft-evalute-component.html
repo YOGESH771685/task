@@ -176,7 +176,7 @@
 
 
 
-@if (loading()) {
+<!-- @if (loading()) {
 <div class="loading">Loading...</div>
 }
 
@@ -184,7 +184,7 @@
 <div class="error">{{ error() }}</div>
 }
 
-<!-- Loop by appArtifactName -->
+
 @for (artifact of objectKeys(groupedData()); track artifact) {
 
 <div class="artifact-block">
@@ -193,7 +193,7 @@
     {{ artifact }}
   </h2>
 
-  <!-- Loop each record -->
+
   @for (item of groupedData()[artifact]; track $index) {
 
   <div class="record-card">
@@ -215,7 +215,7 @@
 
       <tbody>
 
-        <!-- No Difference -->
+
         @if (item.differences.length === 0) {
         <tr>
           <td colspan="3" class="no-diff-cell">
@@ -225,7 +225,7 @@
         </tr>
         }
 
-        <!-- Differences -->
+
         @for (row of item.differences; track $index) {
 
         <tr>
@@ -262,11 +262,170 @@
 
 </div>
 
+
+
+} -->
+
+
+
+
+
+@if (loading()) {
+<div class="loading">Loading...</div>
+}
+@if (error()) {
+<div class="error">{{ error() }}</div>
+}
+@for (artifact of objectKeys(groupedData()); track artifact) {
+<div class="artifact-block">
+  <h2 class="artifact-title">
+    {{ artifact }}
+  </h2>
+  <!-- Loop each record -->
+  @for (item of groupedData()[artifact]; track $index) {
+
+  <div class="record-card">
+
+    <div class="record-header">
+      <span class="state-label">State:</span>
+      <span class="state-value">{{ item.state }}</span>
+    </div>
+
+    <table class="diff-table">
+
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Draft</th>
+          <th>Actual</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <!-- No Difference -->
+        @if (item.differences.length === 0) {
+        <tr>
+          <td colspan="3" class="no-diff-cell">
+            <!-- <div><strong>Draft ID:</strong> {{ item.draftId }}</div> -->
+            <div class="no-diff-text">No Difference</div>
+          </td>
+        </tr>
+        }
+
+        <!-- Differences -->
+        @for (row of item.differences; track $index) {
+
+        <tr>
+          <td class="field-cell">
+            {{ row.field }}
+          </td>
+
+          <td class="draft-cell">
+            <pre>
+{{ row.draft !== null && row.draft !== undefined
+    ? (typeof row.draft === 'object' ? (row.draft | json) : row.draft)
+    : 'null' }}
+            </pre>
+          </td>
+
+          <td class="actual-cell">
+            <pre>
+{{ row.actual !== null && row.actual !== undefined
+    ? (typeof row.actual === 'object' ? (row.actual | json) : row.actual)
+    : 'null' }}
+            </pre>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  }
+</div>
+
 }
 
 
+<!-- MAPPED FIELDS SECTION  -->
+
+@if (mappedFields().length==0){
+  <h2>Mapped fields are empty</h2>
+}
+@else() {
+<div class="mapping-section">
+
+  <h2 class="mapping-title mapped-title">
+    Mapped Fields
+  </h2>
+
+  <table class="mapping-table">
+
+    <thead>
+      <tr>
+        <th>Instance Id</th>
+        <th>Owner Id</th>
+        <th>Event Producer Name</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      @for (item of mappedFields(); track $index) {
+      <tr>
+        <td>{{ item.instanceId }}</td>
+        <td>{{ item.ownerId }}</td>
+        <td>{{ item.eventProducerName }}</td>
+      </tr>
+      }
+
+    </tbody>
+
+  </table>
+
+</div>
+
+}
 
 
+<!-- UNMAPPED FIELDS SECTION -->
+
+
+@if (unmappedFields().length > 0) {
+
+<div class="mapping-section">
+
+  <h2 class="mapping-title unmapped-title">
+    Unmapped Fields
+  </h2>
+
+  <table class="mapping-table">
+
+    <thead>
+      <tr>
+        <th>Instance Id</th>
+        <th>Owner Id</th>
+        <th>Event Producer Name</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      @for (item of unmappedFields(); track $index) {
+      <tr>
+        <td>{{ item.instanceId }}</td>
+        <td>{{ item.ownerId }}</td>
+        <td>{{ item.eventProducerName }}</td>
+      </tr>
+      }
+
+    </tbody>
+
+  </table>
+
+</div>
+
+}
 
 
 

@@ -200,10 +200,184 @@
 
 
 
+// import { Component, signal, inject, OnInit } from '@angular/core';
+// import { CommonModule } from '@angular/common';
+// import { DraftEvaluate } from '../../service/draft-evaluate-service';
+// import { EvaluateApiResponse } from '../../../model/DraftEvaluateResponse';
+
+// @Component({
+//   selector: 'app-diff-view',
+//   standalone: true,
+//   imports: [CommonModule],
+//   templateUrl: './draft-evalute-component.html',
+//   styleUrl: './draft-evalute-component.css',
+// })
+// export class DraftEvaluteComponent implements OnInit {
+
+//   private service = inject(DraftEvaluate);
+
+//   loading = signal(true);
+//   error = signal<string | null>(null);
+
+
+
+//   groupedData = signal<Record<string, any[]>>({});
+
+//   ngOnInit(): void {
+//     this.fetchData();
+//   }
+
+//   fetchData() {
+
+//     this.loading.set(true);
+//     this.error.set(null);
+
+//     const body = {
+//       appArtifactType: 'PAGE',
+//       aggregateAppEntityName: 'Chat_bot',
+//     };
+
+//     this.service.evaluate(body).subscribe({
+//       next: (res) => {
+//         this.groupedData.set(this.groupByArtifact(res));
+//         this.loading.set(false);
+//       },
+//       error: () => {
+//         this.error.set('Failed to fetch data');
+//         this.loading.set(false);
+//       },
+//     });
+//   }
+
+//   // Group by appArtifactName
+//   private groupByArtifact(res: EvaluateApiResponse[]) {
+
+//     const grouped: Record<string, any[]> = {};
+
+//     res.forEach((item) => {
+
+//       if (!grouped[item.appArtifactName]) {
+//         grouped[item.appArtifactName] = [];
+//       }
+
+//       const draft = item.draft ? this.safeParse(item.draft) : null;
+//       const actual = item.actual ? this.safeParse(item.actual) : null;
+
+//       const differences = this.getDifferences(draft, actual);
+
+//       grouped[item.appArtifactName].push({
+//         state: item.state,
+//         differences
+//       });
+
+//     });
+
+//     return grouped;
+//   }
+
+//   // SAFE JSON parse (handles nested JSON strings)
+//   private safeParse(value: any): any {
+
+//     if (typeof value === 'string') {
+//       try {
+//         const parsed = JSON.parse(value);
+//         return this.safeParse(parsed);
+//       } catch {
+//         return value;
+//       }
+//     }
+
+//     if (Array.isArray(value)) {
+//       return value.map(v => this.safeParse(v));
+//     }
+
+//     if (typeof value === 'object' && value !== null) {
+//       const result: any = {};
+//       Object.keys(value).forEach(key => {
+//         result[key] = this.safeParse(value[key]);
+//       });
+//       return result;
+//     }
+
+//     return value;
+//   }
+
+//   // 🔥 Flatten object into key-value map (NO recursion loop)
+//   private flattenObject(obj: any, parentKey: string = '', result: any = {}) {
+
+//     if (!obj) return result;
+
+//     Object.keys(obj).forEach(key => {
+
+//       const newKey = parentKey ? `${parentKey}.${key}` : key;
+//       const value = obj[key];
+
+//       if (typeof value === 'object' && value !== null) {
+
+//         if (Array.isArray(value)) {
+//           value.forEach((item, index) => {
+//             this.flattenObject(item, `${newKey}[${index}]`, result);
+//           });
+//         } else {
+//           this.flattenObject(value, newKey, result);
+//         }
+
+//       } else {
+//         result[newKey] = value;
+//       }
+
+//     });
+
+//     return result;
+//   }
+
+//   // 🔥 Compare flattened objects
+//   private getDifferences(draft: any, actual: any) {
+
+//     const draftFlat = this.flattenObject(draft);
+//     const actualFlat = this.flattenObject(actual);
+
+//     const differences: any[] = [];
+
+//     const allKeys = new Set([
+//       ...Object.keys(draftFlat),
+//       ...Object.keys(actualFlat)
+//     ]);
+
+//     allKeys.forEach(key => {
+
+//       const draftVal = draftFlat[key] ?? null;
+//       const actualVal = actualFlat[key] ?? null;
+
+//       if (draftVal !== actualVal) {
+
+//         differences.push({
+//           field: key,
+//           draft: draftVal ?? 'null',
+//           actual: actualVal ?? 'null'
+//         });
+
+//       }
+
+//     });
+
+//     return differences;
+//   }
+
+//   objectKeys = Object.keys;
+// }
+
+
+
+
+
+
+
+
 import { Component, signal, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DraftEvaluate } from '../../service/draft-evaluate-service';
-import { EvaluateApiResponse } from '../../../model/DraftEvaluateResponse';
+import { DraftEvaluate } from '../../service/PageModeller-draft-evaluate-service';
+import { EvaluateApiResponse } from '../../../model/PageModellerModel';
 
 @Component({
   selector: 'app-diff-view',
@@ -221,6 +395,10 @@ export class DraftEvaluteComponent implements OnInit {
 
   groupedData = signal<Record<string, any[]>>({});
 
+
+  mappedFields = signal<any[]>([]);
+  unmappedFields = signal<any[]>([]);
+
   ngOnInit(): void {
     this.fetchData();
   }
@@ -237,7 +415,13 @@ export class DraftEvaluteComponent implements OnInit {
 
     this.service.evaluate(body).subscribe({
       next: (res) => {
-        this.groupedData.set(this.groupByArtifact(res));
+
+        const grouped = this.groupByArtifact(res);
+        this.groupedData.set(grouped);
+
+        //  process mapping
+        this.processMapping(res);
+
         this.loading.set(false);
       },
       error: () => {
@@ -247,7 +431,8 @@ export class DraftEvaluteComponent implements OnInit {
     });
   }
 
-  // 🔥 Group by appArtifactName
+
+
   private groupByArtifact(res: EvaluateApiResponse[]) {
 
     const grouped: Record<string, any[]> = {};
@@ -265,6 +450,8 @@ export class DraftEvaluteComponent implements OnInit {
 
       grouped[item.appArtifactName].push({
         state: item.state,
+        draft,
+        actual,
         differences
       });
 
@@ -273,13 +460,71 @@ export class DraftEvaluteComponent implements OnInit {
     return grouped;
   }
 
-  // 🔥 SAFE JSON parse (handles nested JSON strings)
+
+  // MAPPING LOGIC
+
+
+  private processMapping(res: EvaluateApiResponse[]) {
+
+  const controlInstances = res
+    .filter(r => r.appArtifactName === 'ControlInstance')
+    .map(r => this.safeParse(r.actual ?? r.draft));
+
+  const dataSources = res
+    .filter(r => r.appArtifactName === 'DataSourceServiceInstance')
+    .map(r => this.safeParse(r.actual ?? r.draft));
+
+  const pageEvents = res
+    .filter(r => r.appArtifactName === 'PageEventsContainer')
+    .map(r => this.safeParse(r.actual ?? r.draft));
+
+  const mapped: any[] = [];
+  const unmapped: any[] = [];
+
+  controlInstances.forEach(control => {
+
+    const instanceId = control?.instanceId;
+
+    const ownerMatch = dataSources.some(ds =>
+      ds?.dataSourceOwnerId === instanceId
+    );
+
+    const eventMatch = pageEvents.some(pe =>
+      pe?.eventProducerName === instanceId
+    );
+
+    if (ownerMatch && eventMatch) {
+      mapped.push({
+        instanceId,
+        ownerId: instanceId,
+        eventProducerName: instanceId
+      });
+    } else {
+      unmapped.push({
+        instanceId,
+        ownerId: ownerMatch ? instanceId : 'Not Matched',
+        eventProducerName: eventMatch ? instanceId : 'Not Matched'
+      });
+    }
+
+  });
+
+  console.log("Mapped:", mapped);
+  console.log("Unmapped:", unmapped);
+
+  this.mappedFields.set(mapped);
+  this.unmappedFields.set(unmapped);
+}
+
+
+
+
+  // SAFE PARSE
   private safeParse(value: any): any {
 
     if (typeof value === 'string') {
       try {
-        const parsed = JSON.parse(value);
-        return this.safeParse(parsed);
+        return this.safeParse(JSON.parse(value));
       } catch {
         return value;
       }
@@ -300,7 +545,9 @@ export class DraftEvaluteComponent implements OnInit {
     return value;
   }
 
-  // 🔥 Flatten object into key-value map (NO recursion loop)
+
+  // DIFF LOGIC
+
   private flattenObject(obj: any, parentKey: string = '', result: any = {}) {
 
     if (!obj) return result;
@@ -329,7 +576,6 @@ export class DraftEvaluteComponent implements OnInit {
     return result;
   }
 
-  // 🔥 Compare flattened objects
   private getDifferences(draft: any, actual: any) {
 
     const draftFlat = this.flattenObject(draft);
@@ -348,13 +594,11 @@ export class DraftEvaluteComponent implements OnInit {
       const actualVal = actualFlat[key] ?? null;
 
       if (draftVal !== actualVal) {
-
         differences.push({
           field: key,
           draft: draftVal ?? 'null',
           actual: actualVal ?? 'null'
         });
-
       }
 
     });

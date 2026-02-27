@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DraftEvaluteComponent } from './draft-evalute-component';
+import { DraftEvaluteComponent } from './PageModeller-draft-evalute-component';
 
 describe('DraftEvaluteComponent', () => {
   let component: DraftEvaluteComponent;

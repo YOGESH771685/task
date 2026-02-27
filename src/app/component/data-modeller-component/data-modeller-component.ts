@@ -250,7 +250,7 @@ export class DataModellerComponent implements OnInit {
     return grouped;
   }
 
-  // 🔥 SAFE JSON parse (handles nested JSON strings)
+  //  SAFE JSON parse (handles nested JSON strings)
   private safeParse(value: any): any {
 
     if (typeof value === 'string') {
@@ -277,7 +277,7 @@ export class DataModellerComponent implements OnInit {
     return value;
   }
 
-  // 🔥 Flatten object into key-value map (NO recursion loop)
+  //  Flatten object into key-value map
   private flattenObject(obj: any, parentKey: string = '', result: any = {}) {
 
     if (!obj) return result;
@@ -306,7 +306,7 @@ export class DataModellerComponent implements OnInit {
     return result;
   }
 
-  // 🔥 Compare flattened objects
+  //  Compare flattened objects
   private getDifferences(draft: any, actual: any) {
 
     const draftFlat = this.flattenObject(draft);

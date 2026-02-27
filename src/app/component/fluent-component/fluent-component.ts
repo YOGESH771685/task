@@ -336,7 +336,7 @@ export class FluentComponent implements OnInit {
 
     if (draft === actual) return changes;
 
-    // 🔥 INSERT case
+    //  INSERT case
     if (draft && actual === null) {
       if (typeof draft === 'object') {
         Object.keys(draft).forEach((key) => {
@@ -352,7 +352,7 @@ export class FluentComponent implements OnInit {
       }
     }
 
-    // 🔥 DELETE case
+    //  DELETE case
     if (actual && draft === null) {
       if (typeof actual === 'object') {
         Object.keys(actual).forEach((key) => {
